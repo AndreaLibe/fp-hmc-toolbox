@@ -1,0 +1,52 @@
+{
+  "algorithm": {
+    "general": {
+      "domain_name": "IGAD_D14",
+      "cdo_path": ""
+    },
+    "templates": {
+      "datetime_folder_rain": "%Y/%m/%d/",
+      "datetime_file_rain": "%Y%m%d%H%M",
+      "datetime_folder_era5": "%Y/%m",
+      "datetime_file_era5": "%Y%m",
+      "datetime_folder_lai": "%m/%d",
+      "datetime_file_lai": "%m%d",
+      "datetime_file_out": "%Y%m%d%H%M",
+      "datetime_folder_out": "%Y/%m/%d/"
+    },
+    "time": {
+      "date_start": "2001-08-01 00:00",
+      "date_end": "2022-07-31 23:00",
+      "frequency": "H"
+    },
+    "path": {
+      "output": "/home/gabellani/IGAD/data_dynamic/{domain}/forcings/{datetime_folder_out}",
+      "ancillary": "/home/gabellani/IGAD/data_dynamic/{domain}/forcings/ancillary/",
+      "log": "/home/gabellani/IGAD/data_dynamic/{domain}/forcings/log"
+    }
+  },
+  "data": {
+    "input": {
+      "data_static": {
+        "folder_name": "/home/gabellani/IGAD/data_static/{domain}/gridded/",
+        "dem": "{domain}.dem.txt"
+      },
+      "data_dynamic": {
+        "rain": {
+          "gsmap_gauge": {
+            "folder_name": "/home/gabellani/IGAD/data_dynamic/GSMAP/{datetime_folder_rain}",
+            "file_name": "IGAD_gsmap_gauge_{datetime_file_rain}.tif"
+          }
+        },
+        "era5": {
+          "folder_name": "/home/gabellani/IGAD/data_dynamic/ERA5/outcome/",
+          "file_name": "era5_obs_{datetime_file_era5}.nc"
+        },
+        "lai": {
+          "folder_name": "/home/gabellani/IGAD/data_dynamic/copernicus_LAI_1km/IGAD_region/{datetime_folder_lai}",
+          "file_name": "CLIM_{datetime_file_lai}_LAI_clip_bbox_IGAD_region.tif"
+        }
+      }
+    }
+  }
+}
