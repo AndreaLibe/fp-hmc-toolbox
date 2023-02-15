@@ -1,0 +1,36 @@
+{
+  "algorithm": {
+    "general": {
+      "domain_name": "marche",
+      "mode": "calibration",
+      "plot_ungauged": false
+    },
+    "time": {
+      "calib_hydro_start": "2019-01-01 00:00",
+      "calib_hydro_end": "2021-01-01 00:00",
+      "frequency": "H"
+    },
+    "path": {
+      "output": "/home/andrea/CIMA/PROJECT_Marche/CALIB_FINAL/further_test/alib_ns/results",
+      "log": "/home/andrea/CIMA/PROJECT_Marche/test_calib/log"
+    }
+  },
+  "data": {
+    "hmc": {
+      "output_folder": "/home/andrea/CIMA/PROJECT_Marche/CALIB_FINAL/further_test/calib_ns/",
+      "output_filename": "hmc.hydrograph.txt",
+      "section_file": "/home/andrea/CIMA/PROJECT_Marche/test_calib/{domain}.info_section.txt",
+      "choice_file" : "/home/andrea/CIMA/PROJECT_Marche/test_calib/{domain}.choice.txt"
+    },
+    "station": {
+      "folder": "/home/andrea/CIMA/PROJECT_Marche/discharge",
+      "filename": "{section_name}.txt",
+      "date_col": 0,
+      "value_col": 2,
+      "sep": ",",
+      "date_fmt": "%Y%m%d%H%M",
+      "calib_hydro_resolution": "H",
+      "null_values": ["","NA"]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "algorithm": {
+    "general": {
+      "domain_name": "IGAD_D11",
+      "mode": "validation",
+      "plot_ungauged": false
+    },
+    "time": {
+      "calib_hydro_start": "2002-01-01 00:00",
+      "calib_hydro_end": "2020-12-31 23:00",
+      "frequency": "D"
+    },
+    "path": {
+      "output": "/home/andrea/CIMA/PROJECT_IGAD/validation/calibration/{domain}/results/",
+      "log": "/home/andrea/CIMA/PROJECT_IGAD/validation/{domain}/log"
+    }
+  },
+  "data": {
+    "hmc": {
+      "output_folder": "/home/andrea/CIMA/PROJECT_IGAD/validation/{domain}/",
+      "output_filename": "hmc.hydrograph.txt",
+      "section_file": "/home/andrea/CIMA/PROJECT_IGAD/validation/{domain}/{domain}.info_section.txt",
+      "choice_file" : "/home/andrea/CIMA/PROJECT_IGAD/validation/{domain}/{domain}.choice.txt"
+    },
+    "station": {
+      "folder": "/home/andrea/CIMA/PROJECT_IGAD/validation/discharge/",
+      "filename": "{section_name}.csv",
+      "date_col": 0,
+      "value_col": 1,
+      "sep": ",",
+      "date_fmt": "%d/%m/%Y",
+      "calib_hydro_resolution": "D",
+      "null_values": ["","NA"]
+    }
+  }
+}

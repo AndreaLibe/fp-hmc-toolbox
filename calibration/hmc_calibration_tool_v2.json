@@ -1,0 +1,100 @@
+{
+  "algorithm": {
+    "flags": {
+      "delete_calib_data": false
+    },
+    "general": {
+      "domain_name": "burundi_nilo",
+      "start_with_iteration_number": 1,
+      "max_number_of_iterations": 5,
+      "number_of_points_first_iteration": 3,
+      "percentage_samples_successive_iterations": 80,
+      "percentage_param_range_reduction": 50,
+      "percentage_min_improvement_quit_optimization": 1,
+      "error_metrics": {
+        "__comment__": "best value: choose if max or min - shift different from 0 if negative values are possible",
+        "function": "kge_2012",
+        "best_value": "max",
+        "shift_for_positive": 1,
+        "minimum_ins_inf" : true}
+    },
+    "time": {
+      "run_hydro_start": "2008-01-01 00:00",
+      "run_hydro_end": "2012-12-31 23:00",
+      "calib_hydro_start": "2008-08-01 10:00"
+    },
+    "path": {
+      "work_path": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/calibration_025_balanced",
+      "out_path": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/output",
+      "log_path": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/log"
+    }
+  },
+  "data": {
+    "hydro": {
+      "folder": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/obs/",
+      "filename": "{section_name}.csv",
+      "date_col": 0,
+      "value_col": 1,
+      "sep": ",",
+      "date_fmt": "%d/%m/%Y",
+      "calib_hydro_resolution": "D",
+      "null_values": ["NA"]
+    },
+    "hmc": {
+      "model_exe": "/home/andrea/Desktop/fake.x",
+      "model_settings": "/home/andrea/Desktop/calib.info.txt",
+      "system_env_libraries" : "/home/idrologia/fp_libs_system/fp_env_system"
+    }
+  },
+  "calibration": {
+    "input_point_data_folder": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/point",
+    "input_gridded_data_folder": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/gridded",
+    "input_base_maps": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/gridded",
+    "sigma_start": 10,
+    "__info__": "pick the calibration approach between rescale - mask - uniform",
+    "parameters": {
+      "ct": {
+        "calibrate": true,
+        "approach": "rescale",
+        "max": 0.7,
+        "min": 0.1
+      },
+      "cf": {
+        "calibrate": false,
+        "approach": "rescale",
+        "max": 0.7,
+        "min": 0.1
+      },
+      "cn": {
+        "calibrate": true,
+        "approach": "rescale",
+        "max": 99,
+        "min": 30
+      },
+      "ws": {
+        "calibrate": true,
+        "approach": "uniform",
+        "max": 10e-07,
+        "min": 10e-12
+      },
+      "fr": {
+        "calibrate": true,
+        "approach": "uniform",
+        "max": 0.8,
+        "min": 0
+      },
+      "wt_max": {
+        "calibrate": true,
+        "approach": "uniform",
+        "max": 3000,
+        "min": 1000
+      },
+      "wdl": {
+        "calibrate": true,
+        "approach": "mask",
+        "max": 10e-07,
+        "min": 10e-12
+      }
+    }
+  }
+}
