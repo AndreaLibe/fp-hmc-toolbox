@@ -63,22 +63,25 @@ def main():
     # -------------------------------------------------------------------------------------
     logging.info(' --> Set algorithm time...')
 
-    timeStart = dateRun - timedelta(hours=data_settings['data']['dynamic']['time']['time_observed_period']-1)
-    timeEnd = dateRun + timedelta(hours=data_settings['data']['dynamic']['time']['time_forecast_period'])
+    timeStart = dateRun - timedelta(hours=data_settings['data']['dynamic']['time']['time_observed_period_h']-1)
+    timeEnd = dateRun + timedelta(hours=data_settings['data']['dynamic']['time']['time_forecast_period_h'])
 
-    time_range=pd.date_range(timeStart, timeEnd, freq='H')
+    time_range=pd.date_range(timeStart, timeEnd, freq=data_settings['data']['dynamic']['time']['time_frequency'])
 
     logging.info(' --> Import static data...')
     dirmap_HMC = [8, 9, 6, 3, 2, 1, 4, 7]
 
     logging.info(' ---> Hydraulic pointers...')
     grid = Grid.from_ascii(data_settings["data"]["static"]["pointers"], data_name='dir')
+    grid_spec = xr.open_rasterio(data_settings["data"]["static"]["pointers"])
     logging.info(' ---> Areacell...')
     areacell = rio.open(data_settings["data"]["static"]["areacell"]).read(1)
     logging.info(' ---> Sections...')
     tabular = pd.read_csv(data_settings["data"]["static"]["section_file"], sep="\s+", header=None)
     rHMC, cHMC, basin_name, section_name = tabular.values[:,0], tabular.values[:,1], tabular.values[:,2], tabular.values[:,3]
     logging.info(' --> Import static data...DONE')
+
+    section_name = [i.replace("-","") for i in section_name]
 
     average_rainfall_mm_h = pd.DataFrame(index=time_range, columns=section_name)
     average_rainfall_m3_s = pd.DataFrame(index=time_range, columns=section_name)
@@ -87,7 +90,7 @@ def main():
     logging.info(' --> Delineate basins masks...')
     # mask definition
     for ix, iy, basin, name in zip(cHMC, rHMC, basin_name, section_name):
-        logging.info(' ---> section: ' + section_name)
+        logging.info(' ---> section: ' + name)
         grid.catchment(data=grid.dir, x=ix-1, y=iy-1, dirmap=dirmap_HMC, out_name= 'basin_' + name,
                        recursionlimit=15000, nodata_out=0, ytype='index')
 
@@ -108,6 +111,7 @@ def main():
             if not os.path.isdir(os.path.join(data_settings['data']['outcome']['folder'],'figure')):
                 os.makedirs(os.path.join(data_settings['data']['outcome']['folder'],'figure'), exist_ok=True)
             plt.savefig(os.path.join(data_settings['data']['outcome']['folder'], 'figure','basin_' + name + '.png'), bbox_inches='tight')
+            plt.close()
     logging.info(' --> Delineate basins masks...DONE')
 
     logging.info(' --> Compute basins rainfall...')
@@ -127,18 +131,23 @@ def main():
         logging.info(' ---> Import gridded rainfall...')
         if data_settings["algorithm"]["flags"]["zipped_forcing"] is True:
             try:
-                os.system('gunzip ' + file_time_now + '.gz')
+                os.system('yes y | gunzip ' + file_time_now + '.gz')
             except:
                 pass
-        rain = np.squeeze(xr.open_dataset(file_time_now)['Rain'].values)
+
+        if data_settings["data"]["dynamic"]["gridded"]["format"] == "tif":
+            rain = np.squeeze(xr.open_rasterio(file_time_now).reindex_like(grid_spec, method='nearest').values)
+        elif data_settings["data"]["dynamic"]["gridded"]["format"] == "nc":
+            rain = xr.open_dataset(file_time_now).squeeze().reindex({data_settings["data"]["dynamic"]["gridded"]["nc_lon"]:grid_spec.x.values, data_settings["data"]["dynamic"]["gridded"]["nc_lat"]:grid_spec.y.values}, method='nearest')[data_settings["data"]["dynamic"]["gridded"]["nc_var"]].values
+        else:
+            logging.error("ERROR! Only nc and tif files are supported!")
+            raise NotImplementedError
 
         logging.info(' ---> Sum over basin mask...')
         for name in section_name:
             mask = eval('np.where(grid.basin_' + name  + '>0, 1, np.nan)')
-            average_rainfall_mm_h.loc[timeNow][name] = np.nanmean(rain*mask)
-            average_rainfall_m3_s.loc[timeNow][name] = np.nansum(rain*np.flipud(mask)*np.flipud(areacell)/(1000*3600))
-            if average_rainfall_m3_s.loc[timeNow][name]<0:
-                print('eccolo')
+            average_rainfall_mm_h.loc[timeNow][name] = np.nanmean(rain*mask).astype('float32')
+            average_rainfall_m3_s.loc[timeNow][name] = np.nansum(rain*mask*areacell/(1000*3600)).astype('float32')
     logging.info(' --> Compute average rainfall...DONE')
 
     logging.info(' --> Save output...')
