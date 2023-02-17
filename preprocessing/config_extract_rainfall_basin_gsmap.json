@@ -1,0 +1,50 @@
+{
+  "algorithm": {
+    "flags": {
+      "plot_basin": true,
+      "zipped_forcing": false
+    },
+    "general": {
+      "title": "Modified Coonditional Merging",
+      "web-site": "",
+      "source": "Python library developed by CIMA Research Foundation",
+      "history": "1.2.0 [20201209]",
+      "project-info": "Hydrological Data Engines - HyDE Library/Project",
+      "algorithm": "Data dynamic tool developed by CIMA Research Foundation"
+    },
+    "template": {
+      "source_gridded_sub_path_time": "%Y/%m/%d/",
+      "source_gridded_datetime": "%Y%m%d%H%M"
+    }
+  },
+  "data": {
+    "static": {
+      "pointers": "/home/idrologia/VOLTA/RAIN/static_data/land/volta.pnt.txt",
+      "areacell": "/home/idrologia/VOLTA/RAIN/static_data/land/volta.areacell.txt",
+      "section_file": "/home/idrologia/VOLTA/RAIN/static_data/point/volta.info_section.txt"
+    },
+    "dynamic": {
+      "time": {
+        "time_observed_period": 23,
+        "time_forecast_period": 0,
+        "time_frequency": "H"
+      },
+      "gridded": {
+        "filename": "volta_gsmap_gauge_{source_gridded_datetime}.tif",
+        "folder": "/home/idrologia/CALIBRATION_HMC/data_dynamic/volta/gsmap/{source_gridded_sub_path_time}",
+        "format": "tif",
+        "nc_var": "Rain",
+        "nc_lat": "lat",
+        "nc_lon": "lon"
+      }
+    },
+    "outcome": {
+      "folder": "/home/idrologia/VOLTA/RAIN/outcome"
+    },
+    "log": {
+      "filename": "hmc_tool_extract_rainfall.txt",
+      "folder": "/home/idrologia/VOLTA/RAIN/log"
+    }
+  }
+}
+
