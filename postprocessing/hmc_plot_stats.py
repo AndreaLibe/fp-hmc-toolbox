@@ -85,6 +85,10 @@ def main():
         for num, lim in enumerate(date_limits, start=1):
             logging.info("--> Read series " + str(num))
             temp = read_discharge_hmc(output_path=hmc_out_path, output_name= data_settings["data"]["hmc"]["output_filename"] + "_series" + str(num), col_names=sections["name"].values)[:lim]
+            temp2 = read_discharge_hmc(output_path=hmc_out_path,
+                                      output_name=data_settings["data"]["hmc"]["output_filename"] + "_series" + str(
+                                          num), col_names=sections["name"].values)[:lim]
+
             hmc_results = hmc_results.combine_first(temp)
         hmc_results = hmc_results.reindex(calibration_period,method="nearest", tolerance="1" + data_settings["data"]["station"]["calib_hydro_resolution"])
     else:
@@ -116,15 +120,17 @@ def main():
                                                 header=0,
                                                 date_parser=custom_date_parser,
                                                 na_values=data_settings["data"]["station"]["null_values"]
-                                                )[calib_hydro_start:calib_hydro_end]\
+                                                )
+            section_data[section] = section_data[section][np.max((calib_hydro_start,min(section_data[section].index))):np.min((calib_hydro_end,max(section_data[section].index)))]
 
             if len(section_data[section]) == 0:
                 print('---> Section: ' + section + "... SKIPPED! No data in selected time slice!")
                 continue
             else:
-                section_data[section] = section_data[section].reindex(calibration_period,
-                                                                                           method="nearest",
-                                                                                           tolerance="1" + data_settings["data"]["station"]["calib_hydro_resolution"]).rename(columns={data_settings["data"]["station"]["value_col"]:'value'})
+                pass
+                #section_data[section] = section_data[section].reindex(calibration_period,
+                                                                                           #method="nearest",
+                                                                                           #tolerance="1" + data_settings["data"]["station"]["calib_hydro_resolution"]).rename(columns={data_settings["data"]["station"]["value_col"]:'value'})
 
             if section == "LakeNo" or section=="Jinja" or section=="SobatNile":
                 section_data[section].values = np.nan
@@ -146,6 +152,7 @@ def main():
 
         mod, = plt.plot(hmc_results[section].index, hmc_results[section].values, '-r')
         obs, = plt.plot(section_data[section].index, pd.to_numeric(section_data[section].values.squeeze(), errors='coerce'), '.b', markersize=2)
+
 
         if section not in missing:
             try:

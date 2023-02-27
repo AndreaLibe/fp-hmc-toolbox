@@ -1,13 +1,13 @@
 {
   "algorithm": {
     "general": {
-      "domain_name": "IGAD_D10",
+      "domain_name": "volta",
       "mode": "calibration",
       "plot_ungauged": false
     },
     "time": {
-      "calib_hydro_start": "2017-01-01 00:00",
-      "calib_hydro_end": "2019-12-30 23:00",
+      "calib_hydro_start": "2017-06-01 00:00",
+      "calib_hydro_end": "2020-12-30 23:00",
       "frequency": "D"
     },
     "path": {
@@ -28,7 +28,7 @@
       "date_col": 0,
       "value_col": 1,
       "sep": ",",
-      "date_fmt": "%d/%m/%Y",
+      "date_fmt": "%Y/%m/%d",
       "calib_hydro_resolution": "D",
       "null_values": ["NA",""]
     }

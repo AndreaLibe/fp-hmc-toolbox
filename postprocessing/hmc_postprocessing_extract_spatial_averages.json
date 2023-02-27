@@ -1,0 +1,49 @@
+{
+  "algorithm": {
+    "flags": {
+      "plot_basin": true,
+      "zipped_outcome": true
+    },
+    "general": {
+      "title": "Modified Coonditional Merging",
+      "web-site": "",
+      "source": "Python library developed by CIMA Research Foundation",
+      "history": "1.2.0 [20201209]",
+      "project-info": "Hydrological Data Engines - HyDE Library/Project",
+      "algorithm": "Data dynamic tool developed by CIMA Research Foundation"
+    },
+    "template": {
+      "source_gridded_sub_path_time": "%Y/%m/%d/",
+      "source_gridded_datetime": "%Y%m%d%H%M"
+    }
+  },
+  "data": {
+    "static": {
+      "pointers": "/home/idrologia/CALIBRATION_HMC/data_static/IGAD_D2/gridded/IGAD_D2.pnt.txt",
+      "areacell": "/home/idrologia/CALIBRATION_HMC/data_static/IGAD_D2/gridded/IGAD_D2.areacell.txt",
+      "section_file": "/home/idrologia/SUDAN/rain_analysis/outcome/point/IGAD_D2.info_section.txt"
+    },
+    "dynamic": {
+      "time": {
+        "time_observed_period_h": 23,
+        "time_forecast_period_h": 0,
+        "time_frequency": "D"
+      },
+      "gridded": {
+        "filename": "hmc.output-grid.{source_gridded_datetime}.nc",
+        "folder": "/home/idrologia/CALIBRATION_HMC/data_dynamic/IGAD_D2/forcings/gsmap_gauge/{source_gridded_sub_path_time}",
+        "nc_var": {"ET": "average"},
+        "nc_lat": "lat",
+        "nc_lon": "lon"
+      }
+    },
+    "outcome": {
+      "folder": "/home/idrologia/SUDAN/test/"
+    },
+    "log": {
+      "filename": "hmc_tool_extract_rainfall.txt",
+      "folder": "/home/idrologia/SUDAN/log/"
+    }
+  }
+}
+
