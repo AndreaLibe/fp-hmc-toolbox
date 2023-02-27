@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-HMC tools - Calibration
+HMC tools - Calibration Multi Domain
 
 __date__ = '20220302'
 __version__ = '1.1.1'
@@ -279,8 +279,8 @@ def main():
         # Setup the explorative runs
         logging.info(' ---> Setup explorative runs...')
         translate_options = gdal.TranslateOptions(format="AAIGrid", outputType=gdal.GDT_Float32, noData=-9999, creationOptions=['FORCE_CELLSIZE=YES'])
-        #with open(data_settings["data"]["hmc"]["model_settings"]) as f:
-            #config_hmc_in = f.read()
+        with open(data_settings["data"]["hmc"]["model_settings"]) as f:
+            config_hmc_in = f.read()
 
         for iExplor in np.arange(1, nExplor + 1):
             logging.info(' --->  ITER' + str(iIter).zfill(2) + '-' + str(iExplor).zfill(3))
@@ -324,16 +324,16 @@ def main():
             os.makedirs(iter_exe_path, exist_ok=True)
 
             shutil.copy(data_settings["data"]["hmc"]["model_exe"], os.path.join(iter_exe_path, "HMC3_calib.x"))
-            #config_hmc_out = config_hmc_in.format(domain='"' + domain + '"',
-            #                                      sim_length=str(int((run_hydro_end - run_hydro_start).total_seconds() / 3600)),
-            #                                      run_hydro_start = run_hydro_start.strftime("%Y%m%d%H%M"),
-            #                                      path_gridded = iter_gridded_path,
-            #                                      path_point = iter_point_path,
-            #                                      path_output = iter_out_path)
+            config_hmc_out = config_hmc_in.format(domain='"' + domain + '"',
+                                                  sim_length=str(int((run_hydro_end - run_hydro_start).total_seconds() / 3600)),
+                                                  run_hydro_start = run_hydro_start.strftime("%Y%m%d%H%M"),
+                                                  path_gridded = iter_gridded_path,
+                                                  path_point = iter_point_path,
+                                                  path_output = iter_out_path)
 
-            #with open(os.path.join(iter_exe_path, domain + ".info.txt"), "w") as f:
-            #    f.write(config_hmc_out)
-            #make_launcher(iter_exe_path, domain, data_settings["data"]["hmc"]["system_env_libraries"])
+            with open(os.path.join(iter_exe_path, domain + ".info.txt"), "w") as f:
+                f.write(config_hmc_out)
+            make_launcher(iter_exe_path, domain, data_settings["data"]["hmc"]["system_env_libraries"])
             logging.info(' ----> Copy and setup model executable...DONE')
 
             maps_iter[iExplor] = maps_out

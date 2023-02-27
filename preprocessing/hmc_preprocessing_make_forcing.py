@@ -134,7 +134,7 @@ def main():
                 logging.info(' -----> Open era5 data: ' + time_now.strftime("%Y-%m"))
                 era5_dset = {}
                 os.system("rm " + os.path.join(ancillary_out, "regrid*"))
-                era5_file = os.path.join(data_settings["data"]["input"]["data_dynamic"]["era5"]["folder_name"], data_settings["data"]["input"]["data_dynamic"]["era5"]["file_name"]).format(**time_now)
+                era5_file = os.path.join(data_settings["data"]["input"]["data_dynamic"]["era5"]["folder_name"], data_settings["data"]["input"]["data_dynamic"]["era5"]["file_name"]).format(**template_filled)
                 os.system(cdo_path + "cdo remapnn," + dem_grid + " " + era5_file + " " + os.path.join(ancillary_out, "regrid_era5_obs_" + time_now.strftime("%Y%m") + ".nc"))
                 last_era = time_now.strftime("%Y%m")
                 for var_era in ["downward_radiation", "RH", "temperature", "wind"]:
@@ -143,7 +143,7 @@ def main():
 
             # Read lai every day at midnight
             lai_file = os.path.join(data_settings["data"]["input"]["data_dynamic"]["lai"]["folder_name"],
-                                     data_settings["data"]["input"]["data_dynamic"]["lai"]["file_name"]).format(**time_now)
+                                     data_settings["data"]["input"]["data_dynamic"]["lai"]["file_name"]).format(**template_filled)
             if last_lai != time_now.strftime("%m%d"):
                 logging.info(' -----> Open lai data: ' + time_now.strftime("%m-%d"))
                 maps["lai"] = np.flipud(np.nan_to_num(np.squeeze(xr.open_rasterio(lai_file).reindex({"x": Lon, "y": Lat}, method='nearest')).values, nan=-9999))
@@ -164,7 +164,7 @@ def main():
             for product in data_settings["data"]["input"]["data_dynamic"]["rain"].keys():
                 try:
                     rain_file = os.path.join(data_settings["data"]["input"]["data_dynamic"]["rain"]["gsmap_gauge"]["folder_name"],
-                                            data_settings["data"]["input"]["data_dynamic"]["rain"]["gsmap_gauge"]["file_name"]).format(**time_now)
+                                            data_settings["data"]["input"]["data_dynamic"]["rain"]["gsmap_gauge"]["file_name"]).format(**template_filled)
                     precip_gsmap = rioxr.open_rasterio(rain_file)
                     maps["rain"] = np.nan_to_num(np.squeeze(precip_gsmap.reindex({"x": Lon, "y": Lat}, method='nearest')).values, nan=-9999)
                     create_forcing(dir_out_now, time_now, coords, maps, 'gsmap_gauge', domain)

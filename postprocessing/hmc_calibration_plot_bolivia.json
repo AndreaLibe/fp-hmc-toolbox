@@ -3,11 +3,11 @@
     "general": {
       "domain_name": "benichapare",
       "mode": "calibration",
-      "plot_ungauged": false
+      "plot_ungauged": true
     },
     "time": {
-      "calib_hydro_start": "2011-09-01 12:00",
-      "calib_hydro_end": "2014-05-30 12:00",
+      "calib_hydro_start": "2003-01-01 12:00",
+      "calib_hydro_end": "2022-12-30 12:00",
       "frequency": "D"
     },
     "path": {
