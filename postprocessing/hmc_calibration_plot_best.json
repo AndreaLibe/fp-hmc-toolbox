@@ -6,7 +6,7 @@
       "plot_ungauged": false
     },
     "time": {
-      "calib_hydro_start": "2017-06-01 00:00",
+      "calib_hydro_start": "2018-01-01 00:00",
       "calib_hydro_end": "2020-12-30 23:00",
       "frequency": "D"
     },

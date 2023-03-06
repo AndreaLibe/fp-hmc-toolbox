@@ -63,7 +63,7 @@ def main():
     # -------------------------------------------------------------------------------------
     logging.info(' --> Set algorithm time...')
 
-    timeStart = dateRun - timedelta(hours=data_settings['data']['dynamic']['time']['time_observed_period_h']-1)
+    timeStart = dateRun - timedelta(hours=data_settings['data']['dynamic']['time']['time_observed_period_h'])
     timeEnd = dateRun + timedelta(hours=data_settings['data']['dynamic']['time']['time_forecast_period_h'])
 
     time_range=pd.date_range(timeStart, timeEnd, freq=data_settings['data']['dynamic']['time']['time_frequency'])
@@ -72,7 +72,7 @@ def main():
     dirmap_HMC = [8, 9, 6, 3, 2, 1, 4, 7]
 
     logging.info(' ---> Hydraulic pointers...')
-    grid = Grid.from_ascii(data_settings["data"]["static"]["pointers"], data_name='dir')
+    grid = Grid.from_ascii(data_settings["data"]["static"]["pointers"], data_name="dir")
     grid_spec = xr.open_rasterio(data_settings["data"]["static"]["pointers"])
     logging.info(' ---> Areacell...')
     areacell = rio.open(data_settings["data"]["static"]["areacell"]).read(1)
@@ -139,11 +139,13 @@ def main():
 
         for var in data_settings["data"]["dynamic"]["gridded"]["nc_var"].keys():
             if var == "ET":
-                var_name = "ETcum"
+                var_name = "ETCum"
             else:
                 var_name = var
 
-            map = xr.open_dataset(file_time_now).squeeze().reindex({data_settings["data"]["dynamic"]["gridded"]["nc_lon"]:grid_spec.x.values, data_settings["data"]["dynamic"]["gridded"]["nc_lat"]:grid_spec.y.values}, method='nearest')[var_name].values
+            temp = xr.open_dataset(file_time_now)
+            map = xr.DataArray(np.flipud(temp[var_name].squeeze()), dims=["lat","lon"], coords={"lon":np.unique(temp["Longitude"]), "lat":np.unique(temp["Latitude"])})
+                               #.reindex({data_settings["data"]["dynamic"]["gridded"]["nc_lon"]:grid_spec.x.values, data_settings["data"]["dynamic"]["gridded"]["nc_lat"]:grid_spec.y.values}, method='nearest')[var_name].values
 
             logging.info(' ---> Compute over basin mask...')
             for name in section_name:
@@ -161,7 +163,7 @@ def main():
     logging.info(' --> Save output...')
     os.makedirs(os.path.join(data_settings['data']['outcome']['folder'], 'tabs'), exist_ok=True)
     for var in data_settings["data"]["dynamic"]["gridded"]["nc_var"]:
-        spatial_daily[var].to_csv(os.path.join(data_settings['data']['outcome']['folder'], 'tabs',["data"]["dynamic"]["gridded"]["nc_var"][var] + '_' + var + '.txt'))
+        spatial_daily[var].to_csv(os.path.join(data_settings['data']['outcome']['folder'], 'tabs',data_settings["data"]["dynamic"]["gridded"]["nc_var"][var] + '_' + var + '.txt'))
 
 
     # -------------------------------------------------------------------------------------
