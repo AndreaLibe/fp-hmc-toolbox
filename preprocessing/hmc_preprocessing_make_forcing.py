@@ -146,7 +146,7 @@ def main():
                                      data_settings["data"]["input"]["data_dynamic"]["lai"]["file_name"]).format(**template_filled)
             if last_lai != time_now.strftime("%m%d"):
                 logging.info(' -----> Open lai data: ' + time_now.strftime("%m-%d"))
-                maps["lai"] = np.flipud(np.nan_to_num(np.squeeze(xr.open_rasterio(lai_file).reindex({"x": Lon, "y": Lat}, method='nearest')).values, nan=-9999))
+                maps["lai"] = np.nan_to_num(np.squeeze(xr.open_rasterio(lai_file).reindex({"x": Lon, "y": Lat}, method='nearest')).values, nan=-9999)
                 last_lai = time_now.strftime("%m%d")
             else:
                 maps["lai"] = None

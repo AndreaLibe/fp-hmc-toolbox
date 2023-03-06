@@ -69,7 +69,8 @@
         "calibrate": true,
         "approach": "rescale",
         "max": 99,
-        "min": 30
+        "min": 30,
+        "mask_lakes": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/gridded/volta.lake_mask.txt"
       },
       "ws": {
         "calibrate": true,

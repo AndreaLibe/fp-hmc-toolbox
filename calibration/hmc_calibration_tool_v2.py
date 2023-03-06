@@ -589,9 +589,14 @@ def rescale_map(map_name, par, par_settings, maps_in):
     map_max = par_settings["max"] * maps_in["mask"]
     map_min = par_settings["min"] * maps_in["mask"]
 
-    scalaATan = (1 - np.double((2 - (1 - np.sign(par))) > 0)) * (maps_in[map_name] - map_min) + np.double(
-        (2 - (1 - np.sign(par))) > 0) * (map_max - maps_in[map_name])
+    scalaATan = (1 - np.double((2 - (1 - np.sign(par))) > 0)) * (maps_in[map_name] - map_min) + np.double((2 - (1 - np.sign(par))) > 0) * (map_max - maps_in[map_name])
     map = maps_in[map_name] + (scalaATan / (math.pi / 2)) * np.arctan(2 * (map_max - map_min) * ((math.pi / 2) / scalaATan) * par)
+
+    if "lakes_mask" in par_settings.keys():
+        logging.info(" ---> Lakes in " + map_name + " map are masked!")
+        lakes_mask = rio.open(par_settings["lakes_mask"]).values()
+        map = np.where(lakes_mask==1, maps_in[map_name], map)
+
     return map
 # -------------------------------------------------------------------------------------
 
