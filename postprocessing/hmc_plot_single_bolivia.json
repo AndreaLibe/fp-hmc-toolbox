@@ -1,0 +1,38 @@
+{
+  "algorithm": {
+    "general": {
+      "domain_name": "benichapare",
+      "mode": "calibration",
+      "plot_ungauged": false
+    },
+    "time": {
+      "calib_hydro_start": "2011-09-01 12:00",
+      "calib_hydro_end": "2014-05-30 12:00",
+      "frequency": "D"
+    },
+    "path": {
+      "output": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/results/",
+      "log": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/log"
+    }
+  },
+  "data": {
+    "hmc": {
+      "hmc" : {
+          "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
+          "output_filename": "hmc.hydrograph.txt"
+        },
+      "section_file": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/point/{domain}.info_section.txt",
+      "choice_file" : "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/gridded/{domain}.choice.txt"
+    },
+    "station": {
+      "folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/discharge/",
+      "filename": "{section_name}.csv",
+      "date_col": 4,
+      "value_col": 5,
+      "sep": ",",
+      "date_fmt": "%m/%d/%Y %H:%M",
+      "calib_hydro_resolution": "D",
+      "null_values": ["NA",""]
+    }
+  }
+}
