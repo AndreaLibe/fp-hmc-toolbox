@@ -1,13 +1,13 @@
 {
   "algorithm": {
     "general": {
-      "domain_name": "benichapare",
+      "domain_name": "volta",
       "mode": "calibration",
-      "plot_ungauged": true
+      "plot_ungauged": false
     },
     "time": {
-      "calib_hydro_start": "2003-01-01 12:00",
-      "calib_hydro_end": "2022-12-30 12:00",
+      "calib_hydro_start": "2018-01-01 00:00",
+      "calib_hydro_end": "2020-12-30 23:00",
       "frequency": "D"
     },
     "path": {
@@ -17,18 +17,26 @@
   },
   "data": {
     "hmc": {
-      "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
-      "output_filename": "hmc.hydrograph.txt",
+      "model_run": {
+        "hmc_imerg" : {
+          "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
+          "output_filename": "hmc.hydrograph.txt"
+        },
+        "hmc_gsmap": {
+          "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
+          "output_filename": "hmc.hydrograph_lakes.txt"
+        }
+      },
       "section_file": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/point/{domain}.info_section.txt",
       "choice_file" : "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/gridded/{domain}.choice.txt"
     },
     "station": {
       "folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/discharge/",
       "filename": "{section_name}.csv",
-      "date_col": 4,
-      "value_col": 5,
+      "date_col": 0,
+      "value_col": 1,
       "sep": ",",
-      "date_fmt": "%m/%d/%Y %H:%M",
+      "date_fmt": "%Y/%m/%d",
       "calib_hydro_resolution": "D",
       "null_values": ["NA",""]
     }

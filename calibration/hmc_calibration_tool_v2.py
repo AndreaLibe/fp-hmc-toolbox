@@ -594,7 +594,7 @@ def rescale_map(map_name, par, par_settings, maps_in):
 
     if "lakes_mask" in par_settings.keys():
         logging.info(" ---> Lakes in " + map_name + " map are masked!")
-        lakes_mask = rio.open(par_settings["lakes_mask"]).values()
+        lakes_mask = rio.open(par_settings["lakes_mask"]).read(1)
         map = np.where(lakes_mask==1, maps_in[map_name], map)
 
     return map
