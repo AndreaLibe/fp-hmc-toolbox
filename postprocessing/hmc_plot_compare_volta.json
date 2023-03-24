@@ -3,11 +3,11 @@
     "general": {
       "domain_name": "volta",
       "mode": "calibration",
-      "plot_ungauged": false
+      "plot_ungauged": true
     },
     "time": {
-      "calib_hydro_start": "2018-01-01 00:00",
-      "calib_hydro_end": "2020-12-30 23:00",
+      "calib_hydro_start": "2017-01-01 00:00",
+      "calib_hydro_end": "2018-12-30 23:00",
       "frequency": "D"
     },
     "path": {
@@ -18,16 +18,24 @@
   "data": {
     "hmc": {
       "model_run": {
-        "hmc_imerg" : {
+        "21" : {
           "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
-          "output_filename": "hmc.hydrograph.txt"
+          "output_filename": "hmc.hydrograph_red21.txt"
         },
-        "hmc_gsmap": {
+        "25" : {
           "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
-          "output_filename": "hmc.hydrograph_lakes.txt"
+          "output_filename": "hmc.hydrograph_red25.txt"
+        },
+        "30" : {
+          "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
+          "output_filename": "hmc.hydrograph_red30.txt"
+        },
+        "38" : {
+          "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
+          "output_filename": "hmc.hydrograph_red38.txt"
         }
       },
-      "section_file": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/point/{domain}.info_section.txt",
+      "section_file": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/{domain}.info_section.txt",
       "choice_file" : "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/gridded/{domain}.choice.txt"
     },
     "station": {

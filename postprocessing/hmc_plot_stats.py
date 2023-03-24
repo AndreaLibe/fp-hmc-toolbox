@@ -154,7 +154,7 @@ def main():
                 except:
                     resume_table[run_name].loc[section] = -9999
 
-        obs, = plt.plot(section_data[section].index, pd.to_numeric(section_data[section].values.squeeze(), errors='coerce'), '.', markersize=2)
+        obs, = plt.plot(section_data[section].index, pd.to_numeric(section_data[section].values.squeeze(), errors='coerce'), '.k', markersize=2)
         plt.title(section)
         hmc_names = [i for i in data_settings["data"]["hmc"]["model_run"].keys()]
         plt.legend([obs] + [mod[i] for i in hmc_names],["obs"] + hmc_names)
