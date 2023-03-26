@@ -7,25 +7,23 @@
     },
     "time": {
       "calib_hydro_start": "2018-01-01 00:00",
-      "calib_hydro_end": "2020-12-30 23:00",
+      "calib_hydro_end": "2020-10-18 23:00",
       "frequency": "D"
     },
     "path": {
-      "output": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/results/",
+      "output": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/results_red/",
       "log": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/log"
     }
   },
   "data": {
     "hmc": {
       "model_run": {
-        "hmc" : {
-          "output_folder": "/home/idrologia/CALIBRATION_HMC/working_dir/volta/simulations/ITER01-{sample_number}/outcome/outcome/time-series/",
-          "output_filename": "hmc.hydrograph.txt"
+        "imerg": {
+          "output_folder": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/",
+          "output_filename": "hmc.hydrograph_red.txt"
         }
       },
-      "number_of_samples": 80,
-      "group_by": 10,
-      "section_file": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/point/{domain}.info_section.txt",
+      "section_file": "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/{domain}.info_section.txt",
       "choice_file" : "/home/andrea/CIMA/DEVELOPEMENT/CALIBRATION_HMC/{domain}/gridded/{domain}.choice.txt"
     },
     "station": {
