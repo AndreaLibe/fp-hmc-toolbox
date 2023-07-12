@@ -1,0 +1,85 @@
+{
+  "algorithm": {
+    "flags": {
+      "delete_calib_data": false
+    },
+    "general": {
+      "domain_name": "volta",
+      "start_with_iteration_number": 1,
+      "max_number_of_iterations": 5,
+      "number_of_points_first_iteration": 30,
+      "percentage_samples_successive_iterations": 80,
+      "percentage_param_range_reduction": 50,
+      "percentage_min_improvement_quit_optimization": 1,
+      "error_metrics": {
+        "__comment__": "best value: choose if max or min - shift different from 0 if negative values are possible",
+        "function": "nrmse_mean",
+        "best_value": "min",
+        "shift_for_positive": 0,
+        "minimum_ins_inf" : false}
+    },
+    "time": {
+      "run_hydro_start": "2008-01-01 00:00",
+      "run_hydro_end": "2012-12-31 23:00",
+      "calib_hydro_start": "2008-08-01 10:00"
+    },
+    "path": {
+      "work_path": "/home/andrea/Projects/WMO_Volta/calibration/volta_beta",
+      "out_path": "/home/andrea/Projects/WMO_Volta/calibration/volta_beta/output",
+      "log_path": "/home/andrea/Projects/WMO_Volta/calibration/volta_beta/log"
+    }
+  },
+  "data": {
+    "hydro": {
+      "folder": "/home/andrea/Projects/WMO_Volta/data/data_dynamic/discharge/",
+      "filename": "{section_name}.csv",
+      "date_col": 0,
+      "value_col": 1,
+      "sep": ",",
+      "date_fmt": "%Y/%m/%d",
+      "calib_hydro_resolution": "D",
+      "null_values": ["NA"]
+    },
+    "hmc": {
+      "model_exe": "/home/andrea/FP/fp_libs_system_hmc/hmc-dev/HMC_316.x",
+      "model_settings": "/home/andrea/FP/fp_libs_system_hmc/hmc-dev/po.info.txt",
+      "system_env_libraries" : "/home/idrologia/fp_libs_system/fp_env_system"
+    }
+  },
+  "calibration": {
+    "input_point_data_folder": "/home/andrea/Projects/WMO_Volta/data/data_static/calibration/point",
+    "input_gridded_data_folder": "/home/andrea/Projects/WMO_Volta/data/data_static/calibration/gridded",
+    "input_base_maps": "/home/andrea/Projects/WMO_Volta/data/data_static/calibration/gridded",
+    "sigma_start": 10,
+    "__info__": "pick the calibration approach between rescale - mask - uniform",
+    "parameters": {
+      "ct": {
+        "calibrate": true,
+        "approach": "rescale",
+        "max": 0.7,
+        "min": 0.1
+      },
+      "soil_ksat_infilt": {
+        "calibrate": true,
+        "approach": "rescale",
+        "max": 50,
+        "min": 0.03,
+        "log_scale": true
+      },
+      "soil_ksat_drain": {
+        "calibrate": true,
+        "approach": "rescale",
+        "max": 50,
+        "min": 0.03,
+        "log_scale": true
+      },
+      "soil_vmax": {
+        "calibrate": true,
+        "approach": "rescale",
+        "max": 1500,
+        "min": 230,
+        "lakes_mask": "/home/andrea/Projects/WMO_Volta/data/data_static/calibration/gridded/volta.lake_mask.txt"
+      }
+    }
+  }
+}

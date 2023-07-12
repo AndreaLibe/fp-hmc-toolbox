@@ -7,7 +7,7 @@
       "domain_name": "burundi_nilo",
       "start_with_iteration_number": 1,
       "max_number_of_iterations": 5,
-      "number_of_points_first_iteration": 3,
+      "number_of_points_first_iteration": 30,
       "percentage_samples_successive_iterations": 80,
       "percentage_param_range_reduction": 50,
       "percentage_min_improvement_quit_optimization": 1,
@@ -50,7 +50,7 @@
     "input_point_data_folder": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/point",
     "input_gridded_data_folder": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/gridded",
     "input_base_maps": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/gridded",
-    "sigma_start": 10,
+    "sigma_start": 0.5,
     "__info__": "pick the calibration approach between rescale - mask - uniform",
     "parameters": {
       "ct": {
@@ -70,7 +70,8 @@
         "approach": "rescale",
         "max": 99,
         "min": 30,
-        "mask_lakes": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/gridded/volta.lake_mask.txt"
+        "mask_lakes": "/home/andrea/CIMA/DEVELOPEMENT/calibration/burundi_test/gridded/volta.lake_mask.txt",
+        "log_scale": true
       },
       "ws": {
         "calibrate": true,
