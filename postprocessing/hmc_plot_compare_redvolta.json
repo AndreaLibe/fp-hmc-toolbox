@@ -1,0 +1,52 @@
+{
+  "algorithm": {
+    "general": {
+      "domain_name": "volta",
+      "mode": "calibration",
+      "plot_ungauged": true
+    },
+    "time": {
+      "calib_hydro_start": "2018-01-01 00:00",
+      "calib_hydro_end": "2020-12-30 23:00",
+      "frequency": "D"
+    },
+    "path": {
+      "output": "/home/andrea/Projects/WMO_Volta/test/red_volta/results_vary_ct",
+      "log": "/home/andrea/Projects/WMO_Volta/test/red_volta/log"
+    }
+  },
+  "data": {
+    "hmc": {
+      "model_run": {
+        "25_ct040" : {
+          "output_folder": "/home/andrea/Projects/WMO_Volta/test/red_volta/outcome/",
+          "output_filename": "hmc.hydrograph_25_ct040.txt"
+        },
+        "25_ct010" : {
+          "output_folder": "/home/andrea/Projects/WMO_Volta/test/red_volta/outcome/",
+          "output_filename": "hmc.hydrograph_25_ct010.txt"
+        },
+        "38_ct040" : {
+          "output_folder": "/home/andrea/Projects/WMO_Volta/test/red_volta/outcome/",
+          "output_filename": "hmc.hydrograph_38_ct040.txt"
+        },
+        "38_ct010" : {
+          "output_folder": "/home/andrea/Projects/WMO_Volta/test/red_volta/outcome/",
+          "output_filename": "hmc.hydrograph_38_ct010.txt"
+        }
+      },
+      "section_file": "/home/andrea/Projects/WMO_Volta/test/red_volta/static/{domain}.info_section.txt",
+      "choice_file" : "/home/andrea/Projects/WMO_Volta/test/red_volta/static/{domain}.choice.txt"
+    },
+    "station": {
+      "folder": "/home/andrea/Projects/WMO_Volta/data/data_dynamic/discharge/",
+      "filename": "{section_name}.csv",
+      "date_col": 0,
+      "value_col": 1,
+      "sep": ",",
+      "date_fmt": "%Y/%m/%d",
+      "calib_hydro_resolution": "D",
+      "null_values": ["NA",""]
+    }
+  }
+}

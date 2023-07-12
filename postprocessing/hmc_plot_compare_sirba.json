@@ -1,0 +1,45 @@
+{
+  "algorithm": {
+    "general": {
+      "domain_name": "sirba",
+      "mode": "calibration",
+      "plot_ungauged": true,
+      "write_html": false
+    },
+    "time": {
+      "calib_hydro_start": "2016-01-01 23:00",
+      "calib_hydro_end": "2021-12-31 23:00",
+      "frequency": "D"
+    },
+    "path": {
+      "output": "/home/andrea/Projects/Niger/sirba/output/",
+      "log": "/home/andrea/Projects/Niger/sirba/log/"
+    }
+  },
+  "data": {
+    "hmc": {
+      "model_run": {
+        "test_late" : {
+          "output_folder": "/home/andrea/Projects/Niger/sirba/",
+          "output_filename": "hmc.hydrograph_late.txt"
+        },
+        "final" : {
+          "output_folder": "/home/andrea/Projects/Niger/sirba/",
+          "output_filename": "hmc.hydrograph_final.txt"
+        }
+      },
+      "section_file": "/home/andrea/Projects/Niger/sirba/{domain}.info_section.txt",
+      "choice_file": "/home/andrea/Projects/Niger/sirba/{domain}.choice.txt"
+    },
+    "station": {
+      "folder": "/home/andrea/Projects/Niger/sirba/discharge",
+      "filename": "{section_name}.csv",
+      "date_col": 0,
+      "value_col": 1,
+      "sep": ",",
+      "date_fmt": "%d/%m/%Y",
+      "calib_hydro_resolution": "D",
+      "null_values": ["NA",""]
+    }
+  }
+}

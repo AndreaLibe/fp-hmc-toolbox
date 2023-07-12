@@ -138,7 +138,14 @@ def main():
         if data_settings["data"]["dynamic"]["gridded"]["format"] == "tif":
             rain = np.squeeze(xr.open_rasterio(file_time_now).reindex_like(grid_spec, method='nearest').values)
         elif data_settings["data"]["dynamic"]["gridded"]["format"] == "nc":
-            rain = xr.open_dataset(file_time_now).squeeze().reindex({data_settings["data"]["dynamic"]["gridded"]["nc_lon"]:grid_spec.x.values, data_settings["data"]["dynamic"]["gridded"]["nc_lat"]:grid_spec.y.values}, method='nearest')[data_settings["data"]["dynamic"]["gridded"]["nc_var"]].values
+            try:
+                rain = xr.open_dataset(file_time_now, decode_times=False).squeeze().reindex({data_settings["data"]["dynamic"]["gridded"]["nc_lon"]:grid_spec.x.values, data_settings["data"]["dynamic"]["gridded"]["nc_lat"]:grid_spec.y.values}, method='nearest')[data_settings["data"]["dynamic"]["gridded"]["nc_var"]].values
+            except ValueError:
+                logging.warning(" --> Forcing has not 1-D lon and lat dimension, try to parse with 2D Latitude and Logitude")
+                logging.warning(" --> WARNING! Results can be flipped! ")
+                rain_temp = xr.open_dataset(file_time_now, decode_times=False).squeeze()
+                rain_out = xr.DataArray(rain_temp[data_settings["data"]["dynamic"]["gridded"]["nc_var"]], dims=["lat","lon"], coords={"lat":np.sort(np.unique(rain_temp["Latitude"].values)),"lon":np.sort(np.unique(rain_temp["Longitude"].values))})
+                rain = rain_out.reindex({data_settings["data"]["dynamic"]["gridded"]["nc_lon"]:grid_spec.x.values, data_settings["data"]["dynamic"]["gridded"]["nc_lat"]:grid_spec.y.values}, method='nearest').values
         else:
             logging.error("ERROR! Only nc and tif files are supported!")
             raise NotImplementedError

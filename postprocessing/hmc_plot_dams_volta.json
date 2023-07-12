@@ -4,7 +4,7 @@
       "domain_name": "volta",
       "mode": "calibration",
       "plot_ungauged": true,
-      "write_html": false
+      "write_html": true
     },
     "time": {
       "calib_hydro_start": "2003-01-01 00:00",
@@ -19,13 +19,13 @@
   "data": {
     "hmc": {
       "model_run": {
-        "orig_patch" : {
+        "hmc" : {
           "output_folder": "/home/andrea/Projects/WMO_Volta/test/last_calib/",
-          "output_filename": "hmc.hydrograph_validation_full.txt"
+          "output_filename": "hmc.vdam_validation_full.txt"
         }
       },
-      "section_file": "/home/andrea/Projects/WMO_Volta/test/compare/last_point/{domain}.info_section.txt",
-      "choice_file": "/home/andrea/Projects/WMO_Volta/test/compare/{domain}.choice.txt"
+      "section_file": "/home/andrea/Projects/WMO_Volta/test/compare/{domain}.dams.txt",
+      "choice_file" : "/home/andrea/Projects/WMO_Volta/test/compare/{domain}.choice.txt"
     },
     "station": {
       "folder": "/home/andrea/Projects/WMO_Volta/data/data_dynamic/integrated_data",

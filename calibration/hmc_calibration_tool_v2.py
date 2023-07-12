@@ -4,8 +4,8 @@
 """
 HMC tools - Calibration Multi Domain
 
-__date__ = '20220302'
-__version__ = '1.1.1'
+__date__ = '20230330'
+__version__ = '1.2.0'
 __author__ = 'Andrea Libertino (andrea.libertino@cimafoundation.org')
              'Lorenzo Campo (lorenzo.campo@cimafoundation.org')
              'Lorenzo Alfieri (lorenzo.alfieri@cimafoundation.org')
@@ -17,6 +17,8 @@ python3 HMC_calibration -settings_file "FILE.json"
 20210226 (1.0.0) -->    Separate multi-domain branch with discharge-only support
 20220302 (1.1.0) -->    Changed calibration approach
 20220513 (1.1.1) -->    Bug fixes
+20230330 (1.2.0) -->    Add logarithmic scale sampling
+                        Add lakes mask
 """
 # -------------------------------------------------------------------------------------
 # Complete library
@@ -105,6 +107,12 @@ def main():
     custom_date_parser = lambda x: dt.datetime.strptime(str(x), data_settings["data"]["hydro"]["date_fmt"])
 
     for par in calibrated_params:
+        if not "log_scale" in data_settings['calibration']['parameters'][par].keys():
+            data_settings['calibration']['parameters'][par]["log_scale"] = False
+        if data_settings['calibration']['parameters'][par]["log_scale"]:
+            data_settings['calibration']["parameters"][par]['min'] = np.log10(data_settings['calibration']["parameters"][par]['min'])
+            data_settings['calibration']["parameters"][par]['max'] = np.log10(data_settings['calibration']["parameters"][par]['max'])
+    for par in calibrated_params:
         for lim in ['min', 'max']:
             param_limits.loc[lim][par] = data_settings['calibration']['parameters'][par][lim]
         param_limits.loc['sigma'][par] = np.nan
@@ -136,7 +144,10 @@ def main():
         calibrated_params_approach[approach] = [var for var in calibrated_params if data_settings['calibration']['parameters'][var]["approach"] == approach]
         if not approach == "uniform":
             for par in calibrated_params_approach[approach]:
-                maps_in[par] = np.where(maps_in['mask'] ==1, rio.open(os.path.join(data_settings["calibration"]["input_base_maps"], domain + "." + par + ".txt")).read(1), np.nan)
+                if data_settings['calibration']['parameters'][par]["log_scale"]:
+                    maps_in[par] = np.where(maps_in['mask'] ==1, np.log10(rio.open(os.path.join(data_settings["calibration"]["input_base_maps"], domain + "." + par + ".txt")).read(1)), np.nan)
+                else:
+                    maps_in[par] = np.where(maps_in['mask'] == 1, rio.open(os.path.join(data_settings["calibration"]["input_base_maps"], domain + "." + par + ".txt")).read(1), np.nan)
         logging.info(' ----> Param(s) calibrated with approach ' + approach + ': ' + ' ,'.join(calibrated_params_approach[approach]))
 
     # Sigma has a different meaning accordign to the approaches: for the rescale it is the amplitude of the arctan rescale interval
@@ -158,8 +169,7 @@ def main():
     section_file = os.path.join(data_settings["calibration"]["input_point_data_folder"], domain + ".info_section.txt")
     area_file = os.path.join(data_settings["calibration"]["input_gridded_data_folder"], domain + ".area.txt")
 
-    sections = pd.read_csv(section_file, sep="\s", header=None, names=["row_HMC", "col_HMC", "basin", "name"],
-                           usecols=[0, 1, 2, 3])
+    sections = pd.read_csv(section_file, sep="\s", header=None, names=["row_HMC", "col_HMC", "basin", "name"], usecols=[0, 1, 2, 3])
     area = rio.open(area_file).read(1)
     logging.info('---> Search observed series')
 
@@ -262,16 +272,21 @@ def main():
         for par in calibrated_params:
             if par in calibrated_params_approach["rescale"]:
                 # With the rescale method maps are rescaled with arctan rescaling limited to a sigma-wide neighbourhood
-                # The neighbourhood is asymmetrical keeping into account the ditance of the average from the limits
-                diff_inf = np.abs(np.nanmean(maps_in[par]) - param_limits[par]['min'])
-                diff_sup = np.abs(np.nanmean(maps_in[par]) - param_limits[par]['max'])
+                # The neighbourhood is asymmetrical keeping into account the distance of the average from the limits
+                if "lakes_mask" in data_settings['calibration']["parameters"][par].keys():
+                    logging.info(" ---> Lakes in " + par + " map are masked!")
+                    lakes_mask = rio.open(data_settings['calibration']["parameters"][par]["lakes_mask"]).read(1)
+                    map_clean = np.where(lakes_mask == 1, np.nan, maps_in[par])
+                else:
+                    map_clean = maps_in[par]
+                diff_inf = np.abs(np.nanmean(map_clean) - param_limits[par]['min'])
+                diff_sup = np.abs(np.nanmean(map_clean) - param_limits[par]['max'])
                 min_scale = - (param_limits.loc['sigma'][par]*diff_inf/(diff_sup+diff_inf))
                 max_scale = (param_limits.loc['sigma'][par]*diff_sup/(diff_sup+diff_inf))
             else:
                 min_scale = param_limits[par]['min']
                 max_scale = param_limits[par]['max']
-            param[par] = ((seedIter[par] - np.min(seedIter[par])) / (np.max(seedIter[par]) - np.min(seedIter[par]))) * (
-                                   max_scale - min_scale) + min_scale
+            param[par] = ((seedIter[par] - np.min(seedIter[par])) / (np.max(seedIter[par]) - np.min(seedIter[par]))) * (max_scale - min_scale) + min_scale
 
         # -------------------------------------------------------------------------------------
 
@@ -307,7 +322,10 @@ def main():
             for par in calibrated_params:
                 maps_out[par] = implemented_approaches[data_settings['calibration']['parameters'][par]["approach"]](par, param[par][iExplor], data_settings['calibration']["parameters"][par], maps_in)
                 with rio.open(os.path.join(iter_gridded_path,'temp.tif'), 'w', **header) as dst:
-                    dst.write(np.nan_to_num(maps_out[par].astype(rio.float32), nan=-9999), 1)
+                    if data_settings['calibration']['parameters'][par]["log_scale"]:
+                        dst.write(np.nan_to_num(10 ** maps_out[par].astype(rio.float32), nan=-9999), 1)
+                    else:
+                        dst.write(np.nan_to_num(maps_out[par].astype(rio.float32), nan=-9999), 1)
                 gdal.Translate(os.path.join(iter_gridded_path,domain + '.' + par + '.txt'), os.path.join(iter_gridded_path,'temp.tif'), options=translate_options)
                 os.remove(os.path.join(iter_gridded_path,'temp.tif'))
             logging.info(' ---> Generate exploration static maps...DONE')
@@ -337,7 +355,6 @@ def main():
             logging.info(' ----> Copy and setup model executable...DONE')
 
             maps_iter[iExplor] = maps_out
-
         # -------------------------------------------------------------------------------------
 
         # -------------------------------------------------------------------------------------
@@ -456,7 +473,10 @@ def main():
     os.makedirs(os.path.join(data_settings["algorithm"]["path"]["out_path"], "gridded",""), exist_ok=True)
     for par in calibrated_params:
         with rio.open(os.path.join(data_settings["algorithm"]["path"]["out_path"], "gridded", 'temp.tif'), 'w', **header) as dst:
-            dst.write(np.nan_to_num(maps_out[par].astype(rio.float32), nan=-9999), 1)
+            if data_settings['calibration']['parameters'][par]["log_scale"]:
+                dst.write(np.nan_to_num(10 ** maps_out[par].astype(rio.float32), nan=-9999), 1)
+            else:
+                dst.write(np.nan_to_num(maps_out[par].astype(rio.float32), nan=-9999), 1)
         gdal.Translate(os.path.join(data_settings["algorithm"]["path"]["out_path"], "gridded", domain + '.' + par + '.txt'),
                        os.path.join(data_settings["algorithm"]["path"]["out_path"], "gridded", 'temp.tif'), options=translate_options)
         os.remove(os.path.join(data_settings["algorithm"]["path"]["out_path"], "gridded", 'temp.tif'))
@@ -598,6 +618,7 @@ def rescale_map(map_name, par, par_settings, maps_in):
         map = np.where(lakes_mask==1, maps_in[map_name], map)
 
     return map
+
 # -------------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------------

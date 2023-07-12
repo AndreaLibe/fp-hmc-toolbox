@@ -28,6 +28,7 @@ import plotly.io as pio
 import numpy as np
 from matplotlib.colors import hsv_to_rgb
 from cycler import cycler
+import random
 
 # -------------------------------------------------------------------------------------
 
@@ -37,7 +38,11 @@ from cycler import cycler
 def main():
     start_time = time.time()
     cm = 1 / 2.54
-    colors = [hsv_to_rgb([(i * 0.318033988749895) % 1.0, 1, 1]) for i in range(100)]
+    number_of_colors = 100
+    random.seed(30)
+    colors = ["#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+             for i in range(number_of_colors)]
+    # colors = [hsv_to_rgb([(i * 0.318033988749895) % 1.0, 1, 1]) for i in range(100)]
     # -------------------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------------------
@@ -62,6 +67,11 @@ def main():
     # Set output path
     output_path = data_settings["algorithm"]["path"]["output"].format(domain=domain)
     os.makedirs(output_path, exist_ok=True)
+
+    try:
+        make_html=data_settings["algorithm"]["general"]["write_html"]
+    except:
+        make_html=True
     # -------------------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------------------
@@ -112,7 +122,8 @@ def main():
                                                 date_parser=custom_date_parser,
                                                 na_values=data_settings["data"]["station"]["null_values"]
                                                 )
-            section_data[section] = section_data[section][np.max((calib_hydro_start,min(section_data[section].index))):np.min((calib_hydro_end,max(section_data[section].index)))]
+            mask = (section_data[section].index >= np.max((calib_hydro_start,min(section_data[section].index)))) & (section_data[section].index <= np.min((calib_hydro_end,max(section_data[section].index))))
+            section_data[section] = section_data[section].loc[mask]
 
             if len(section_data[section]) == 0:
                 print('---> Section: ' + section + "... SKIPPED! No data in selected time slice!")
@@ -158,9 +169,14 @@ def main():
         plt.title(section)
         hmc_names = [i for i in data_settings["data"]["hmc"]["model_run"].keys()]
         plt.legend([obs] + [mod[i] for i in hmc_names],["obs"] + hmc_names)
-        plt.savefig(os.path.join(output_path, section + ".png"))
-        plotly_fig = tls.mpl_to_plotly(fig_object)
-        pio.write_html(plotly_fig, os.path.join(output_path, section + '.html'))
+
+        basin = sections.loc[sections.name == section, "basin"].values[0]
+        if "vdam" in  data_settings["data"]["hmc"]["model_run"][run_name]["output_filename"]:
+            basin = "DAM_" + basin
+        plt.savefig(os.path.join(output_path, basin + "_" + section + ".png"))
+        if make_html:
+            plotly_fig = tls.mpl_to_plotly(fig_object)
+            pio.write_html(plotly_fig, os.path.join(output_path, basin + "_" + section + '.html'))
 
     for run_name in data_settings["data"]["hmc"]["model_run"].keys():
         resume_table[run_name].to_csv(os.path.join(output_path, run_name + "_scores.csv"))
