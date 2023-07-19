@@ -1,0 +1,90 @@
+{
+  "algorithm": {
+    "general": {
+      "domain_name": "belize",
+      "skip_existing": true,
+      "include_lai": true
+    },
+    "templates": {
+      "datetime_folder_var": "%Y/%m/%d/",
+      "datetime_file_var": "%Y%m%d%H%M",
+      "datetime_folder_era5": "%Y/%m",
+      "datetime_file_era5": "%Y%m",
+      "datetime_folder_lai": "%m/%d",
+      "datetime_file_lai": "%m%d",
+      "datetime_file_out": "%Y%m%d%H%M",
+      "datetime_folder_out": "%Y/%m/%d/"
+    },
+    "time": {
+      "date_start": "2001-08-01 00:00",
+      "date_end": "2022-07-31 23:00",
+      "frequency": "H"
+    },
+    "path": {
+      "output": "/home/gabellani/IGAD/data_dynamic/{domain}/forcings/{datetime_folder_out}",
+      "ancillary": "/home/gabellani/IGAD/data_dynamic/{domain}/forcings/ancillary/",
+      "log": "/home/gabellani/IGAD/data_dynamic/{domain}/forcings/log"
+    }
+  },
+  "data": {
+    "input": {
+      "data_static": {
+        "folder_name": "/home/gabellani/IGAD/data_static/{domain}/gridded/",
+        "dem": "{domain}.dem.txt"
+      },
+      "data_dynamic": {
+        "__info__": "supported formats are netcdf tif",
+        "hmc_vars": {
+          "AirTemperature": {
+            "file_path": "/home/idrologia/share/BELIZE/data/data_dynamic/outcome/obs/ws_wind/{datetime_folder_var}/hmc.forcing-grid.{datetime_file_var}.nc.gz",
+            "var_name": "Air_Temperature",
+            "format": "netcdf",
+            "regrid": false,
+            "zipped": true,
+            "lat_lon": ["latitude","longitude"]
+          },
+          "IncRadiation": {
+            "file_path": "/home/idrologia/share/BELIZE/data/data_dynamic/outcome/obs/ws_wind/{datetime_folder_var}/hmc.forcing-grid.{datetime_file_var}.nc.gz",
+            "var_name": "Incoming_Radiation",
+            "format": "netcdf",
+            "regrid": false,
+            "zipped": true,
+            "lat_lon": ["latitude","longitude"]
+          },
+          "Rain": {
+            "file_path": "/home/idrologia/share/BELIZE/data/data_dynamic/outcome/obs/ws_wind/{datetime_folder_var}/hmc.forcing-grid.{datetime_file_var}.nc.gz",
+            "var_name": "Rain",
+            "format": "netcdf",
+            "regrid": false,
+            "zipped": true,
+            "lat_lon": ["latitude","longitude"]
+          },
+          "RelHumidity": {
+            "file_path": "/home/idrologia/share/BELIZE/data/data_dynamic/outcome/obs/ws_wind/{datetime_folder_var}/hmc.forcing-grid.{datetime_file_var}.nc.gz",
+            "var_name": "Relative_Humidity",
+            "format": "netcdf",
+            "regrid": false,
+            "zipped": true,
+            "lat_lon": ["latitude","longitude"]
+          },
+          "Wind": {
+            "file_path": "/home/idrologia/share/BELIZE/data/data_dynamic/outcome/obs/ws_wind/{datetime_folder_var}/hmc.forcing-grid.{datetime_file_var}.nc.gz",
+            "var_name": "Wind",
+            "format": "netcdf",
+            "regrid": false,
+            "zipped": true,
+            "lat_lon": ["latitude","longitude"]
+          },
+          "LAI": {
+            "file_path": "/home/idrologia/share/BELIZE/data/data_dynamic/clim/{datetime_folder_lai}/CLIM_{datetime_file_lai}_LAI_regridded_belize.tif",
+            "var_name": null,
+            "format": "tif",
+            "regrid": false,
+            "zipped": false,
+            "lat_lon": ["y","x"]
+          }
+        }
+      }
+    }
+  }
+}
