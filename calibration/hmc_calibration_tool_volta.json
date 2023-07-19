@@ -7,7 +7,7 @@
       "domain_name": "volta",
       "start_with_iteration_number": 1,
       "max_number_of_iterations": 5,
-      "number_of_points_first_iteration": 30,
+      "number_of_points_first_iteration": 50,
       "percentage_samples_successive_iterations": 80,
       "percentage_param_range_reduction": 50,
       "percentage_min_improvement_quit_optimization": 1,
@@ -19,19 +19,19 @@
         "minimum_ins_inf" : false}
     },
     "time": {
-      "run_hydro_start": "2008-01-01 00:00",
-      "run_hydro_end": "2012-12-31 23:00",
-      "calib_hydro_start": "2008-08-01 10:00"
+      "run_hydro_start": "2017-01-01 00:00",
+      "run_hydro_end": "2020-12-30 23:00",
+      "calib_hydro_start": "2017-06-01 00:00"
     },
     "path": {
-      "work_path": "/home/andrea/Projects/WMO_Volta/calibration/volta_beta",
-      "out_path": "/home/andrea/Projects/WMO_Volta/calibration/volta_beta/output",
-      "log_path": "/home/andrea/Projects/WMO_Volta/calibration/volta_beta/log"
+      "work_path": "/home/idrologia/CALIBRATION_HMC/working_dir/volta_beta2-giulia",
+      "out_path": "/home/idrologia/CALIBRATION_HMC/working_dir/volta_beta2-giulia/output",
+      "log_path": "/home/idrologia/CALIBRATION_HMC/working_dir/volta_beta2-giulia/log"
     }
   },
   "data": {
     "hydro": {
-      "folder": "/home/andrea/Projects/WMO_Volta/data/data_dynamic/discharge/",
+      "folder": "/home/idrologia/CALIBRATION_HMC/data_dynamic/volta/discharge_censored_giulia/",
       "filename": "{section_name}.csv",
       "date_col": 0,
       "value_col": 1,
@@ -41,15 +41,15 @@
       "null_values": ["NA"]
     },
     "hmc": {
-      "model_exe": "/home/andrea/FP/fp_libs_system_hmc/hmc-dev/HMC_316.x",
-      "model_settings": "/home/andrea/FP/fp_libs_system_hmc/hmc-dev/po.info.txt",
+      "model_exe": "/home/idrologia/VOLTA/HMC/test_last_calib/exe/HMC_3_1_6_dighe_alte_illimitate.x",
+      "model_settings": "/home/idrologia/CALIBRATION_HMC/data_static/exe/calib.info_volta_beta2.txt",
       "system_env_libraries" : "/home/idrologia/fp_libs_system/fp_env_system"
     }
   },
   "calibration": {
-    "input_point_data_folder": "/home/andrea/Projects/WMO_Volta/data/data_static/calibration/point",
-    "input_gridded_data_folder": "/home/andrea/Projects/WMO_Volta/data/data_static/calibration/gridded",
-    "input_base_maps": "/home/andrea/Projects/WMO_Volta/data/data_static/calibration/gridded",
+    "input_point_data_folder": "/home/idrologia/CALIBRATION_HMC/data_static/volta/point",
+    "input_gridded_data_folder": "/home/idrologia/CALIBRATION_HMC/data_static/volta/gridded_beta2",
+    "input_base_maps": "/home/idrologia/CALIBRATION_HMC/data_static/volta/gridded_beta2",
     "sigma_start": 10,
     "__info__": "pick the calibration approach between rescale - mask - uniform",
     "parameters": {
@@ -57,28 +57,31 @@
         "calibrate": true,
         "approach": "rescale",
         "max": 0.7,
-        "min": 0.1
+        "min": 0.1,
+        "lakes_mask": "/home/idrologia/CALIBRATION_HMC/data_static/volta/gridded_beta2/volta.lake_mask.txt"
       },
       "soil_ksat_infilt": {
         "calibrate": true,
         "approach": "rescale",
         "max": 50,
         "min": 0.03,
-        "log_scale": true
+        "log_scale": true,
+        "lakes_mask": "/home/idrologia/CALIBRATION_HMC/data_static/volta/gridded_beta2/volta.lake_mask.txt"
       },
       "soil_ksat_drain": {
         "calibrate": true,
         "approach": "rescale",
         "max": 50,
         "min": 0.03,
-        "log_scale": true
+        "log_scale": true,
+        "lakes_mask": "/home/idrologia/CALIBRATION_HMC/data_static/volta/gridded_beta2/volta.lake_mask.txt"
       },
       "soil_vmax": {
         "calibrate": true,
         "approach": "rescale",
         "max": 1500,
         "min": 230,
-        "lakes_mask": "/home/andrea/Projects/WMO_Volta/data/data_static/calibration/gridded/volta.lake_mask.txt"
+        "lakes_mask": "/home/idrologia/CALIBRATION_HMC/data_static/volta/gridded_beta2/volta.lake_mask.txt"
       }
     }
   }
